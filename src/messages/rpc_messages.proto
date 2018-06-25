@@ -1,0 +1,265 @@
+
+message PbRpcRequest {
+    required int32 MsgId = 1;
+    required int32 MethodId = 2;
+    optional bytes Arguments = 3;
+}
+
+message PbRpcReply {
+    required int32 MsgId = 1;
+    optional bytes Results = 2;
+}
+
+// key-value store
+message PbRpcEchoTest {
+    optional bytes text = 1;
+}
+
+message PbVersionVector {
+    repeated sfixed64 Version = 1;
+}
+
+message PbPhysicalTimeSpec {
+    required int64 Seconds = 1;
+    required int64 NanoSeconds = 2;
+}
+
+message PbRpcKVPublicGetServerConfigResult {
+    required bool Succeeded = 1;
+    required int32 NumPartitions = 2;
+    required int32 NumReplicasPerPartition = 3;
+    required bool OptimisticMode = 4;
+    required int32 replicaId = 5;
+}
+
+message PbRpcKVPublicGetArg {
+    required bytes Key = 1;
+    optional PbPhysicalTimeSpec GST = 2;
+    optional PbPhysicalTimeSpec minLST = 3;
+    repeated PbPhysicalTimeSpec NDV = 4;
+    repeated PbPhysicalTimeSpec GSV = 5;
+}
+
+message PbRpcKVPublicGetResult {
+    required bool Succeeded = 1;
+    required bytes GetValue = 2;
+    optional PbPhysicalTimeSpec DT = 3;
+    optional PbPhysicalTimeSpec GST = 4;
+    optional PbPhysicalTimeSpec DUT = 5;
+    optional bool Blocked = 6;
+    optional bytes MinLSTKey = 7;
+    repeated PbPhysicalTimeSpec DV = 8;
+    optional int32 SrcReplica = 9; //source replica id
+    repeated PbPhysicalTimeSpec GSV = 10;
+
+}
+
+message PbRpcKVPublicSetArg {
+    required bytes Key = 1;
+    required bytes Value = 2;
+    optional PbPhysicalTimeSpec DT = 3;
+    optional bytes MinLSTKey = 4;
+    repeated PbPhysicalTimeSpec DV = 5;
+}
+
+message PbRpcKVPublicSetResult {
+    required bool Succeeded = 1;
+    optional PbPhysicalTimeSpec DT = 2;
+    optional int32 SrcReplica = 3; //source replica id
+}
+
+message PbRpcKVPublicTxGetArg {
+    repeated bytes Key = 1;
+    //Snapshot time/vector
+    optional PbPhysicalTimeSpec ST = 2;
+    optional PbPhysicalTimeSpec UT = 3;
+    repeated PbPhysicalTimeSpec SV = 4;
+}
+
+message PbRpcKVPublicTxGetResult {
+    required bool Succeeded = 1;
+    repeated bytes GetValue = 2;
+    //Snapshot time/vector
+    optional PbPhysicalTimeSpec ST = 3;
+    repeated PbPhysicalTimeSpec SV = 4;
+    //Update time/vector
+    optional PbPhysicalTimeSpec UT = 5;
+    repeated PbPhysicalTimeSpec UV = 6;
+}
+
+message PbRpcKVPublicShowArg {
+    optional bytes Key = 1;
+}
+
+message PbRpcKVPublicShowResult {
+    required bool Succeeded = 1;
+    required bytes ReturnString = 2;
+}
+
+// partition
+message PbRpcKVInternalGetArg {
+    required bytes Key = 1;
+    optional PbPhysicalTimeSpec GST = 2;
+    optional PbPhysicalTimeSpec minLST = 3;
+    repeated PbPhysicalTimeSpec NDV = 4;
+    repeated PbPhysicalTimeSpec GSV = 5;
+}
+
+message PbRpcKVInternalGetResult {
+    required bool Succeeded = 1;
+    required bytes GetValue = 2;
+    optional PbPhysicalTimeSpec DT = 3;
+    optional PbPhysicalTimeSpec GST = 4;
+    optional PbPhysicalTimeSpec DUT = 5;
+    optional bytes MinLSTKey = 6;
+    optional bool Blocked = 7;
+    repeated PbPhysicalTimeSpec DV = 8;
+    optional int32 SrcReplica = 9;
+    repeated PbPhysicalTimeSpec GSV = 10;
+}
+
+message PbRpcKVInternalSetArg {
+    required bytes Key = 1;
+    required bytes Value = 2;
+    optional PbPhysicalTimeSpec DT = 3;
+    optional bytes MinLSTKey = 4;
+    repeated PbPhysicalTimeSpec DV = 5;
+}
+
+message PbRpcKVInternalSetResult {
+    required bool Succeeded = 1;
+    optional PbPhysicalTimeSpec DT = 2;
+    optional int32 SrcReplica = 3;
+}
+
+message PbRpcKVInternalTxSliceGetArg {
+    required bytes Key = 1;
+    optional PbPhysicalTimeSpec ST = 2;
+    repeated PbPhysicalTimeSpec SV = 3; //can be GSV or DV
+    optional int64 id = 4;
+    optional int64 src = 5;
+}
+
+message PbRpcKVInternalTxSliceGetResult {
+    required bool Succeeded = 1;
+    required bytes GetValue = 2;
+    optional PbPhysicalTimeSpec DT = 3;
+    optional PbPhysicalTimeSpec GST = 4;
+    optional PbPhysicalTimeSpec DUT = 5;
+    repeated PbPhysicalTimeSpec DV = 6;
+    repeated PbPhysicalTimeSpec NDV = 7;
+    repeated PbPhysicalTimeSpec GSV = 8;
+    optional int32 SrcReplica = 9;
+    optional double waitedXact = 10;
+    optional int64 id = 11;
+    optional int64 src = 12;
+}
+
+message PbRpcKVInternalShowItemArg {
+    required bytes Key = 1;
+}
+
+message PbRpcKVInternalShowItemResult {
+    required bool Succeeded = 1;
+    required bytes ItemVersions = 2;
+}
+
+message PbUpdatedItemVersion {
+    required int64 LUT = 1;
+    required int32 SrcReplica = 2;
+}
+
+// replication
+message PbRpcReplicationArg {
+    // update
+    repeated PbPhysicalTimeSpec remoteDV = 1;
+    repeated bytes UpdateRecord = 2;
+
+}
+
+message PbRpcHeartbeat {
+    required PbPhysicalTimeSpec PhysicalTime = 1;
+    required int64 LogicalTime = 2;
+}
+
+// GST computation
+
+message PbRpcLST {
+    required PbPhysicalTimeSpec Time = 1;
+    required int32 Round = 2;
+    repeated PbPhysicalTimeSpec PVV = 3;
+}
+
+message PbRpcGST {
+    required PbPhysicalTimeSpec Time = 1;
+}
+
+message PbRpcGSTReq {
+    required PbPhysicalTimeSpec Time = 1;
+    required int32 PeerId = 2;
+    repeated PbPhysicalTimeSpec GSV = 3;
+}
+
+
+message PbRpcPVV {
+    required int32 Round = 1;
+    repeated PbPhysicalTimeSpec PVV = 2;
+}
+
+message PbRpcGSV {
+    repeated PbPhysicalTimeSpec GSV = 1;
+}
+
+// manager
+message PbRpcGroupServiceResult {
+    required bool Succeeded = 1;
+}
+
+message PbPartition {
+    required string Name = 1;
+    required int32 PublicPort = 2;
+    required int32 PartitionPort = 3;
+    required int32 ReplicationPort = 4;
+    required int32 PartitionId = 5;
+    required int32 ReplicaId = 6;
+}
+
+// format: [ P1_R1, P1_R2, P1_R3, P2_R1, ... ]
+message PbRegisteredPartitions {
+    required int32 NumPartitions = 1;
+    required int32 NumReplicasPerPartition = 2;
+    repeated PbPartition Partition = 3;
+}
+
+message PbRpcKVInternalPrepareReplyResult{
+    required int64 id = 1;
+    required PbPhysicalTimeSpec PT = 2; //prepare time
+    required int64 src = 3;
+    optional double blockDuration = 4;
+}
+
+message PbRpCommitRequestArg{
+    required int64 id = 1;
+    required PbPhysicalTimeSpec CT = 2; //prepare time
+}
+
+message PbRpcKVPublicCommitArg {
+    required int64 ID = 1;
+    repeated bytes Key = 2;
+    repeated bytes Value = 3;
+
+}
+
+message PbRpcKVPublicCommitResult {
+    required bool Succeeded = 1;
+    required PbPhysicalTimeSpec CT = 2; //commit time
+
+}
+
+message PbRpcPartitionClientPrepareRequestResult{
+    required int64 id = 1;
+    required PbPhysicalTimeSpec PT = 2; //prepare time
+    required int64 src = 3;
+    optional double blockDuration = 4;
+}
+

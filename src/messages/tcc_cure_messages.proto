@@ -1,0 +1,87 @@
+import "rpc_messages.proto";
+
+ message PbRpcTccCurePublicStartArg{
+     repeated PbPhysicalTimeSpec DV = 1;
+ }
+
+ message PbRpcTccCurePublicStartResult {
+     required bool Succeeded = 1;
+     required int64 ID = 2;
+     repeated PbPhysicalTimeSpec DV = 3;
+}
+
+ message PbRpcTccCureKVPublicReadArg{
+    required int64 ID = 1;
+    repeated bytes Key = 2;
+ }
+
+ message PbRpcTccCureKVPublicReadResult {
+     required bool Succeeded = 1;
+     repeated bytes Value = 2;
+ }
+
+ message PbRpcTccCureKVPublicCommitArg {
+  required int64 ID = 1;
+  repeated bytes Key = 2;
+  repeated bytes Value = 3;
+
+ }
+
+ message PbRpcTccCureKVPublicCommitResult{
+    required bool Succeeded = 1;
+    repeated PbPhysicalTimeSpec CT = 2; //commit time vector
+ }
+
+message PbRpcTccCureKVInternalTxSliceGetArg {
+    required bytes Key = 1;
+    repeated PbPhysicalTimeSpec DV = 2;
+    optional int64 id = 3;
+    optional int64 src = 4;
+}
+
+message PbRpcTccCureKVInternalTxSliceGetResult {
+    required bool Succeeded = 1;
+    required bytes GetValue = 2;
+    optional int32 SrcReplica = 3;
+    optional double waitedXact = 4;
+    optional int64 id = 5;
+    optional int64 src = 6;
+}
+
+message PbRpcTccCureKVInternalTxSliceReadKeysArg {
+    repeated bytes Key = 1;
+    repeated PbPhysicalTimeSpec DV = 2;
+    optional int64 id = 3;
+    optional int64 src = 4;
+}
+
+message PbRpcTccCureKVInternalTxSliceReadKeysResult {
+    required bool Succeeded = 1;
+    repeated bytes Value = 2;
+    optional int32 SrcReplica = 3;
+    optional double waitedXact = 4;
+    optional int64 id = 5;
+    optional int64 src = 6;
+}
+
+message PbRpcTccCurePartitionClientPrepareRequestArg{
+    required int64 id = 1;
+    repeated PbPhysicalTimeSpec DV = 2;
+    repeated bytes Key = 3;
+    repeated bytes Value = 4;
+    required int64 src = 5;
+}
+
+message PbRpcTccCureKVPublicGetServerConfigResult {
+    required bool Succeeded = 1;
+    required int32 NumPartitions = 2;
+    required int32 NumReplicasPerPartition = 3;
+    required int32 replicaId = 4;
+}
+
+message PbRpTccCureCommitRequestArg{
+    required int64 id = 1;
+    repeated PbPhysicalTimeSpec CT = 2; //commit time vector
+}
+
+

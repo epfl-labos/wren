@@ -1,0 +1,44 @@
+import "rpc_messages.proto";
+
+
+//We want to reduce to the bare minimum the stuff we send
+message PbLogSetRecord {
+  required bytes Key = 1;
+  required bytes Value = 2;
+  required PbPhysicalTimeSpec PUT = 3;
+  optional PbPhysicalTimeSpec PDUT = 4;
+  repeated PbPhysicalTimeSpec DV = 5;
+  required int32 SrcReplica = 6;
+}
+
+
+message PbLogTccWrenSetRecord {
+  required bytes Key = 1;
+  required bytes Value = 2;
+  required PbPhysicalTimeSpec UT = 3;
+  optional PbPhysicalTimeSpec RST = 4;
+  required int32 SrcReplica = 5;
+  required int64 LUT = 6;
+  optional PbPhysicalTimeSpec CreationTime = 7;
+
+}
+
+message PbLogTccGrainSetRecord {
+  required bytes Key = 1;
+  required bytes Value = 2;
+  required PbPhysicalTimeSpec UT = 3;
+  optional PbPhysicalTimeSpec PDUT = 4;
+  required int32 SrcReplica = 5;
+  required int64 LUT = 6;
+  optional PbPhysicalTimeSpec CreationTime = 7;
+}
+
+message PbLogTccCureSetRecord {
+  required bytes Key = 1;
+  required bytes Value = 2;
+  required PbPhysicalTimeSpec UT = 3;
+  repeated PbPhysicalTimeSpec DV = 4;
+  required int32 SrcReplica = 5;
+  required int64 LUT = 6;
+  optional PbPhysicalTimeSpec CreationTime = 7;
+}

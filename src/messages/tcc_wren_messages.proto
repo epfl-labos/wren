@@ -1,0 +1,86 @@
+import "rpc_messages.proto";
+
+message PbRpcTccWrenPublicStartArg {
+    required PbPhysicalTimeSpec LDT = 1; //local dependency time
+    required PbPhysicalTimeSpec RST = 2; // remote stable time
+}
+
+message PbRpcTccWrenPublicStartResult {
+    required bool Succeeded = 1;
+    required int64 ID = 2;
+    required PbPhysicalTimeSpec RST = 3; // remote stable time
+}
+
+message PbRpcTccWrenKVPublicReadArg {
+    required int64 ID = 1;
+    repeated bytes Key = 2;
+}
+
+message PbRpcTccWrenKVPublicReadResult {
+    required bool Succeeded = 1;
+    repeated bytes Value = 2;
+}
+
+message PbRpcTccWrenKVPublicCommitArg {
+    required int64 ID = 1;
+    repeated bytes Key = 2;
+    repeated bytes Value = 3;
+
+}
+
+message PbRpcTccWrenKVPublicCommitResult {
+    required bool Succeeded = 1;
+    required PbPhysicalTimeSpec CT = 2; //commit time
+
+}
+
+message PbRpcTccWrenKVInternalTxSliceGetArg {
+    required bytes Key = 1;
+    required PbPhysicalTimeSpec LDT = 2;
+    required PbPhysicalTimeSpec RST = 3; //can be GSV or DV
+    optional int64 id = 4;
+    optional int64 src = 5;
+}
+
+message PbRpcTccWrenKVInternalTxSliceGetResult {
+    required bool Succeeded = 1;
+    required bytes GetValue = 2;
+    optional int32 SrcReplica = 3;
+    optional double waitedXact = 4;
+    optional int64 id = 5;
+    optional int64 src = 6;
+}
+
+message PbRpcTccWrenKVInternalTxSliceReadKeysArg {
+    repeated bytes Key = 1;
+    required PbPhysicalTimeSpec LDT = 2;
+    required PbPhysicalTimeSpec RST = 3; //can be GSV or DV
+    optional int64 id = 4;
+    optional int64 src = 5;
+}
+
+message PbRpcTccWrenKVInternalTxSliceReadKeysResult {
+    required bool Succeeded = 1;
+    repeated bytes Value = 2;
+    optional int32 SrcReplica = 3;
+    optional double waitedXact = 4;
+    optional int64 id = 5;
+    optional int64 src = 6;
+}
+
+message PbRpcRST {
+    required PbPhysicalTimeSpec Time = 1;
+    optional int32 SrcPartition = 2;
+}
+
+message PbRpcTccWrenPartitionClientPrepareRequestArg {
+    required int64 id = 1;
+    required PbPhysicalTimeSpec LDT = 2;
+    required PbPhysicalTimeSpec RST = 3;
+    repeated bytes Key = 4;
+    repeated bytes Value = 5;
+    required int64 src = 6;
+}
+
+
+

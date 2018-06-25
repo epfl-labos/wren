@@ -1,0 +1,10 @@
+import "tcc_wren_messages.proto";
+import "tcc_nb_wren_messages.proto";
+import "tcc_cure_messages.proto";
+
+message PbRpcTxPublicGetServerConfigResult {
+    required bool Succeeded = 1;
+    required int32 NumPartitions = 2;
+    required int32 NumReplicasPerPartition = 3;
+    required int32 replicaId = 5;
+}

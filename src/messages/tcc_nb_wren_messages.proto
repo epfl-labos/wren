@@ -1,0 +1,84 @@
+import "rpc_messages.proto";
+
+message PbRpcTccNBWrenPublicStartArg {
+    required PbPhysicalTimeSpec GLST = 1; // global local stable time
+    required PbPhysicalTimeSpec GRST = 2; // global remote stable time
+}
+
+message PbRpcTccNBWrenPublicStartResult {
+    required bool Succeeded = 1;
+    required int64 ID = 2;
+    required PbPhysicalTimeSpec GRST = 3; // global remote stable time
+    required PbPhysicalTimeSpec GLST = 4; // global local stable time
+}
+
+message PbRpcTccNBWrenKVPublicReadArg {
+    required int64 ID = 1;
+    repeated bytes Key = 2;
+}
+
+message PbRpcTccNBWrenKVPublicReadResult {
+    required bool Succeeded = 1;
+    repeated bytes Value = 2;
+}
+
+message PbRpcTccNBWrenKVPublicCommitArg {
+    required int64 ID = 1;
+    repeated bytes Key = 2;
+    repeated bytes Value = 3;
+    optional PbPhysicalTimeSpec LCT = 4; //latest client commit time
+
+}
+
+message PbRpcTccNBWrenKVPublicCommitResult {
+    required bool Succeeded = 1;
+    required PbPhysicalTimeSpec CT = 2; //commit time
+
+}
+
+message PbRpcTccNBWrenKVInternalTxSliceReadKeysArg {
+    repeated bytes Key = 1;
+    required PbPhysicalTimeSpec LST = 2;
+    required PbPhysicalTimeSpec RST = 3;
+    optional int64 id = 4;
+    optional int64 src = 5;
+}
+
+message PbRpcTccNBWrenPartitionClientPrepareRequestArg {
+    required int64 id = 1;
+    required PbPhysicalTimeSpec LST = 2;
+    required PbPhysicalTimeSpec RST = 3;
+    required PbPhysicalTimeSpec HT = 4;
+    repeated bytes Key = 5;
+    repeated bytes Value = 6;
+    required int64 src = 7;
+}
+
+message PbRpcStabilizationTime {
+    required PbPhysicalTimeSpec GRST = 1;
+    required PbPhysicalTimeSpec GLST = 2;
+}
+
+message PbRpcPeerStabilizationTimes {
+    required PbPhysicalTimeSpec RST = 1;
+    required PbPhysicalTimeSpec LST = 2;
+    optional int64 SrcPartition = 4;
+}
+
+message PbRpcST {
+    required int32 Round = 1;
+    required PbPhysicalTimeSpec RST = 2;
+    required PbPhysicalTimeSpec LST = 3;
+
+}
+
+message PbRpcTccNBWrenKVInternalTxSliceReadKeysResult {
+    required bool Succeeded = 1;
+    repeated bytes Value = 2;
+    optional int32 Src = 3; //Source replica of the read value
+    optional int64 id = 4;
+    optional double waitedXact = 5;
+}
+
+
+
